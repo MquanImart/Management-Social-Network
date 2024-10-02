@@ -1,7 +1,9 @@
-import { RouterProvider, createBrowserRouter, useSearchParams } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from '../../features/user-authentication/containers/login/Login';
 import UserManagementPage from '../../features/management-user/containers/management-user/UserManagementPage'
 import DashboardPage from '../../features/dashboard/containers/dashboard/DashboardPage'
+import ManagementNewsFeed from '../../features/management-news-feed/containers/management-news-feed/ManagementNewsFeed';
+import DetailNewsFeed from '../../features/management-news-feed/containers/detail-news-feed/DetailNewsFeed';
 const Routes = () => {
 
   
@@ -22,6 +24,14 @@ const Routes = () => {
         path: '/dashboard',
         element: <DashboardPage />,
     },
+    {
+      path: '/management-news-feed',
+      element: <ManagementNewsFeed />,
+    },
+    {
+      path: '/detail-news-feed/:id',
+      element: <DetailNewsFeed />,
+   },
   ]);
 
   return <RouterProvider router={router} />;
