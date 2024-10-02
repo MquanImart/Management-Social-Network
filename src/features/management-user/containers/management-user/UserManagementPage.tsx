@@ -82,10 +82,10 @@ const UserManagementPage: React.FC = () => {
         <Header />
         <Box sx={{mb: 2}}/>
         <Grid container spacing={2}>
-          <Grid item xs={8.5}>
+          <Grid item xs={8}>
             <UserTable users={users} onViewUser={handleViewUser} />
           </Grid>
-          <Grid item xs={3.5}>
+          <Grid item xs={4}>
             <UserDetails user={selectedUser} onLockUnlock={handleLockUnlock} />
           </Grid>
         </Grid>

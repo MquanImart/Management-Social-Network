@@ -13,11 +13,11 @@ const Sidebar: React.FC = () => {
 
   // Các mục trong sidebar với đường dẫn tương ứng
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'User Management', icon: <PeopleIcon />, path: '/management-user' },
-    { text: 'Article Management', icon: <ArticleIcon />, path: '/management-news-feed' },
-    { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
-    { text: 'Log Out', icon: <LogoutIcon />, path: '/logout' },
+    { text: 'Thống Kê', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'Quản lí người dùng', icon: <PeopleIcon />, path: '/management-user' },
+    { text: 'Quản lí bài viết', icon: <ArticleIcon />, path: '/management-news-feed' },
+    { text: 'Cài đặt', icon: <SettingsIcon />, path: '/settings' },
+    { text: 'Đăng xuất', icon: <LogoutIcon />, path: '/logout' },
   ];
 
   return (
@@ -41,7 +41,7 @@ const Sidebar: React.FC = () => {
           color: primaryColor,
         }}
       >
-        swiftCRM
+        HỆ THỐNG ADMIN
       </Typography>
 
       <Divider sx={{ mb: 3 }} />

@@ -12,10 +12,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointEleme
 
 const DashboardPage: React.FC = () => {
   const barChartData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
     datasets: [
       {
-        label: 'New Users',
+        label: 'Người dùng mới',
         data: [5, 10, 15, 20, 25, 30, 35],
         backgroundColor: '#1976d2',
       },
@@ -23,10 +23,10 @@ const DashboardPage: React.FC = () => {
   };
 
   const lineChartData = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
     datasets: [
       {
-        label: 'User Growth',
+        label: 'Sự tăng trưởng ngừoi dùng',
         data: [50, 100, 200, 300],
         borderColor: '#1976d2',
         borderWidth: 2,
@@ -36,10 +36,10 @@ const DashboardPage: React.FC = () => {
   };
 
   const pieChartData = {
-    labels: ['Group A', 'Group B', 'Group C'],
+    labels: ['Nhóm A', 'Nhóm B', 'Nhóm C'],
     datasets: [
       {
-        label: 'User Distribution',
+        label: 'Số người trong nhóm',
         data: [200, 150, 100],
         backgroundColor: ['#1976d2', '#66bb6a', '#ffa726'],
       },
@@ -47,10 +47,10 @@ const DashboardPage: React.FC = () => {
   };
 
   const infoCards = [
-    { title: 'Total Users', value: 1200, bgColor: '#1976d2' },
-    { title: 'Total Groups', value: 150, bgColor: '#66bb6a' },
-    { title: 'Total Articles', value: 500, bgColor: '#ffa726' },
-    { title: 'New Users This Month', value: 120, bgColor: '#ef5350' },
+    { title: 'Tổng người dùng', value: 1200, bgColor: '#1976d2' },
+    { title: 'Tổng nhóm', value: 150, bgColor: '#66bb6a' },
+    { title: 'Tổng bài viết', value: 500, bgColor: '#ffa726' },
+    { title: 'Người dùng mới', value: 120, bgColor: '#ef5350' },
   ];
 
   return (
@@ -67,13 +67,13 @@ const DashboardPage: React.FC = () => {
         <InfoCards cards={infoCards} />
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <BarChart data={barChartData} title="Number of New Users This Week" />
+            <BarChart data={barChartData} title="Số người dùng mới trong tuần" />
           </Grid>
           <Grid item xs={12} md={6}>
-            <LineChart data={lineChartData} title="User Growth Over the Month" />
+            <LineChart data={lineChartData} title="Tăng trưởng người dùng trong tháng" />
           </Grid>
           <Grid item xs={12} md={6}>
-            <PieChart data={pieChartData} title="User Distribution by Groups" />
+            <PieChart data={pieChartData} title="Phân phối người dùng theo nhóm" />
           </Grid>
         </Grid>
       </Grid>

@@ -20,7 +20,7 @@ const Header: React.FC = () => {
     >
       {/* Tiêu đề */}
       <Typography variant="h6" fontWeight="bold">
-        User Management
+        HỆ THỐNG ADMIN
       </Typography>
 
       {/* Phần tìm kiếm và thông tin người dùng */}
