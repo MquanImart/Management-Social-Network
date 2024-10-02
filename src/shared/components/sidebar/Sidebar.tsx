@@ -5,7 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-
+import ArticleIcon from '@mui/icons-material/Article';
 const Sidebar: React.FC = () => {
   const primaryColor = '#1976d2'; // Màu chủ đạo
   const location = useLocation(); // Lấy đường dẫn hiện tại
@@ -15,6 +15,7 @@ const Sidebar: React.FC = () => {
   const menuItems = [
     { text: 'Thống Kê', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Quản lí người dùng', icon: <PeopleIcon />, path: '/management-user' },
+    { text: 'Quản lí bài viết', icon: <ArticleIcon />, path: '/management-news-feed' },
     { text: 'Cài đặt', icon: <SettingsIcon />, path: '/settings' },
     { text: 'Đăng xuất', icon: <LogoutIcon />, path: '/logout' },
   ];
