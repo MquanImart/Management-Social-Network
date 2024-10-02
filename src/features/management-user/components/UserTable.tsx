@@ -13,12 +13,12 @@ const UserTable: React.FC<UserTableProps> = ({ users, onViewUser }) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Tên</TableCell>
             <TableCell sx={{ fontWeight: 'bold' }}>Email</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Phone Number</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Warning Level</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>SĐT</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Mức độ vi phạm</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Tác vụ</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -43,10 +43,10 @@ const UserTable: React.FC<UserTableProps> = ({ users, onViewUser }) => {
                     style={{ backgroundColor: '#007BFF', color: 'white' }}
                     onClick={() => onViewUser(user)}
                   >
-                    View
+                    Xem
                   </Button>
                   <Button variant="outlined" color="secondary" size="small">
-                    Edit
+                    Sửa
                   </Button>
                 </Box>
               </TableCell>

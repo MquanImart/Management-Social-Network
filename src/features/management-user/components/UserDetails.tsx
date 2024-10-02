@@ -50,15 +50,17 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <PhoneIcon sx={{ color: primaryColor, mr: 1 }} />
-          <Typography variant="body1"><strong>Phone Number: </strong>{user.details.phoneNumber}</Typography>
+          <Typography variant="body1"><strong>SĐT: </strong>{user.details.phoneNumber}</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <HomeIcon sx={{ color: primaryColor, mr: 1 }} />
-          <Typography variant="body1"><strong>Address: </strong>{user.details.address}</Typography>
+          <Typography variant="body1"><strong>Địa chỉ: </strong>{user.details.address}</Typography>
         </Box>
-        <Typography variant="body1"><strong>Warning Level: </strong>{user.account.warningLevel}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Typography variant="body1"><strong>Mức độ vi phạm: </strong>{user.account.warningLevel}</Typography>
+        </Box> 
         <Typography variant="body1">
-          <strong>Status: </strong>
+          <strong>Trạng thái: </strong>
           <span style={{ color: user.status === 'active' ? primaryColor : 'red', fontWeight: 'bold' }}>
             {user.status === 'active' ? 'Active' : 'Locked'}
           </span>
@@ -69,7 +71,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
 
       {/* About Me Section */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6" fontWeight="bold" color={primaryColor}>About Me</Typography>
+        <Typography variant="h6" fontWeight="bold" color={primaryColor}>Giới thiệu</Typography>
         <Typography variant="body2" color="#424242" sx={{ fontStyle: 'italic' }}>
           {user.aboutMe}
         </Typography>
@@ -77,7 +79,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
 
       {/* Hobbies Section */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" fontWeight="bold" color={primaryColor}>Hobbies</Typography>
+        <Typography variant="h6" fontWeight="bold" color={primaryColor}>Sở thích</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
           {user.hobbies.length > 0 ? (
             user.hobbies.map((hobby, index) => (
@@ -97,7 +99,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
               </Box>
             ))
           ) : (
-            <Typography variant="body2" color="#9e9e9e">No hobbies specified</Typography>
+            <Typography variant="body2" color="#9e9e9e">Không có</Typography>
           )}
         </Box>
       </Box>
