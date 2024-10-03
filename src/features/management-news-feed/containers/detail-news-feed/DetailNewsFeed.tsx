@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Box, Button, Grid } from '@mui/material';
-import { Article, Comment } from '../../../../interface/interface';
+import { Box, Button, Grid, Typography } from '@mui/material';
+import { Article } from '../../../../interface/interface';
 import Post from '../../../../shared/components/post/Post';
 import Sidebar from '../../../../shared/components/sidebar/Sidebar';
 import Header from '../../../../shared/components/header/Header';
@@ -38,31 +38,23 @@ const DetailNewsFeed = () => {
         createdBy: "53591573157137"
     }
   );
-  const handleAddComment = (postId: string, newComment: Comment) => {
-    setPost({ 
-        ...post, 
-        interact: { 
-            ...post.interact, 
-            comment: [
-                ...post.interact.comment, 
-                newComment] } }
-        )
-  }
-  const handleAddReply = (postId: string, commentId: string, newReply: Comment) => {
-    setPost({
-        ...post,
-        interact: { 
-            ...post.interact, 
-            comment: post.interact.comment.map((comment)=> comment._id === commentId?{
-                ...comment,
-                replyComment: [...comment.replyComment, newReply],
-              }: comment) } }
-        )
-  };
 
-  const handleDeletePost = (postId: string) => {
-    
-  };
+  const deleteArticle = () => {
+    setPost({
+      ...post,
+      _destroy: new Date()
+    })
+}
+
+const completeCheckArticle = () => {
+    setPost({
+      ...post,
+      reports: post.reports.map((report) => ({
+        ...report,
+        status: 'rejected',
+      })),
+    });
+  }
 
   return (
     <Grid container sx={{ height: '100vh' }}>
@@ -72,17 +64,36 @@ const DetailNewsFeed = () => {
       <Grid item xs={9} sx={{ backgroundColor: '#f8f9fb' }}>
         <Header />
         <Box sx={{mb: 2}}/>
-        <Button variant="text" sx={{margin: '10px'}} startIcon={<ArrowBackIosNewIcon/>}
-        onClick={() => navigate(-1)}>
-            Quay lại
-        </Button>
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
+          <Button variant="text" sx={{margin: '10px'}} startIcon={<ArrowBackIosNewIcon/>}
+          onClick={() => navigate(-1)}>
+              Quay lại
+          </Button>
+          <Box display='flex'>
+            {
+              post._destroy === null? (
+                <Button variant="outlined" color="secondary" size="small"
+            sx={{borderColor: 'red', margin: '0px 10px'}} onClick={() => {deleteArticle()}}>
+              Delete
+            </Button>
+              ): (
+                <Typography sx={{margin: '0px 10px'}}>Đã xóa</Typography>
+              )
+            }
+            <Button variant="outlined" color="secondary" size="small"
+             sx={{borderColor: 'green', margin: '0px 10px'}} onClick={() => completeCheckArticle()} >
+              Complete
+            </Button>
+          </Box>
+        </Box>
         <Post
           post={post}
-          onAddComment={handleAddComment}
-          onAddReply={handleAddReply}
-          onDeletePost={handleDeletePost}
           currentUserId={'user001'}
         />
+        <Button variant="contained"
+          sx={{width: '100%', backgroundColor: '#e9e9e9', color: 'black', margin: '10px 0px'}}>
+          Xem trang cá nhân
+        </Button>
         <ListReport reports={post.reports}/>
     </Grid>
     </Grid>

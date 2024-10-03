@@ -4,7 +4,7 @@ import { Article } from "../../../../interface/interface";
 const useNewsFeed = () => {
     const [listArticle, setListArticle]  = useState<Article[]>(sampleArticles);
 
-    const deteleArticle = (articleID: string) => {
+    const deleteArticle = (articleID: string) => {
         setListArticle(
             listArticle.map((article) =>
               article._id === articleID
@@ -32,7 +32,7 @@ const useNewsFeed = () => {
 
     return {
         listArticle, setListArticle,
-        deteleArticle,
+        deleteArticle,
         completeCheckArticle
     }
 }
