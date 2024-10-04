@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   FormControl,
@@ -11,7 +10,16 @@ import {
   Typography
 } from '@mui/material';
 
-const FilterNewsFeed = () => {
+interface FilterNewsFeedProps {
+  selectedLevel: string[];
+  selectedStatus: string[];
+  sortOrder: string;
+  handleChangeLevel: (event: SelectChangeEvent<string[]>) => void;
+  handleChangeStatus: (event: SelectChangeEvent<string[]>) => void;
+  handleSortChange: (event: SelectChangeEvent<string>) => void;
+}
+
+const FilterNewsFeed = ({selectedLevel, selectedStatus, sortOrder, handleChangeLevel, handleChangeStatus, handleSortChange} : FilterNewsFeedProps) => {
     const Level = [
         'Nghiêm trọng',
         'Xem xét',
@@ -27,23 +35,6 @@ const FilterNewsFeed = () => {
         { value: 'desc', label: 'Descending' },
       ];
 
-    const [selectedLevel, setSelectedLevel] = useState<string[]>([]);
-    const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
-    const [sortOrder, setSortOrder] = useState<string>(sortOptions[0].value);
-  
-
-    const handleChangeLevel = (event: SelectChangeEvent<string[]>) => {
-        const value = event.target.value as string[];
-        setSelectedLevel(value);
-    };
-    const handleChangeStatus = (event: SelectChangeEvent<string[]>) => {
-        const value = event.target.value as string[];
-        setSelectedStatus(value);
-    };
-    const handleSortChange = (event: SelectChangeEvent<string>) => {
-        setSortOrder(event.target.value as string);
-    };
-
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
     <Box sx={{ display: 'flex', alignItems: 'center'}}>
@@ -56,9 +47,13 @@ const FilterNewsFeed = () => {
           onChange={handleChangeLevel}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap'}}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
+              {selected.length === Level.length ? (
+                <Chip label="Tất cả" />
+              ) : (
+                selected.map((value) => (
+                  <Chip key={value} label={value}/>
+                ))
+              )}
             </Box>
           )}
         >
@@ -78,9 +73,13 @@ const FilterNewsFeed = () => {
           onChange={handleChangeStatus}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap'}}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
+              {selected.length === Level.length ? (
+                <Chip label="Tất cả" />
+              ) : (
+                selected.map((value) => (
+                  <Chip key={value} label={value}/>
+                ))
+              )}
             </Box>
           )}
         >

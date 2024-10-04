@@ -1,28 +1,23 @@
  
 import React, { useState } from 'react';
-import { Box, Typography, Avatar, Paper, Button, IconButton, Collapse, TextField, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { MoreHoriz, Favorite, Comment, Share, CardGiftcard, ThumbUpAlt, Reply, Report, Delete, Bookmark } from '@mui/icons-material';
+import { Box, Typography, Avatar, Paper, Button,Collapse, TextField, Dialog, DialogActions, DialogContent, DialogTitle, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import {  Favorite, Comment, Share, CardGiftcard, ThumbUpAlt, Reply, Report } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
-import { Comment as CommentType, Article } from '../../../interface/interface';
+import { Article } from '../../../interface/interface';
 
 interface PostComponentProps {
   post: Article;
-  onAddComment: (postId: string, newComment: CommentType) => void;
-  onAddReply: (postId: string, commentId: string, newReply: CommentType) => void;
-  onDeletePost: (postId: string) => void; // Thêm hàm để xử lý xóa bài viết
-  currentUserId: string; // ID của người dùng hiện tại
+  currentUserId: string;
 }
 
-const Post = ({ post, onAddComment, onAddReply, onDeletePost, currentUserId }: PostComponentProps) => {
+const Post = ({ post, currentUserId }: PostComponentProps) => {
   const [showComments, setShowComments] = useState(false);
-  const [likedPosts, setLikedPosts] = useState<string[]>([]);
+  const [likedPosts, __] = useState<string[]>([]);
   const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({});
   const [replyInputs, setReplyInputs] = useState<{ [key: string]: boolean }>({});
   const [replyTexts, setReplyTexts] = useState<{ [key: string]: string }>({});
   const [newComment, setNewComment] = useState('');
   
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [selectedReportReason, setSelectedReportReason] = useState<string>('');
   const [reportTarget, setReportTarget] = useState<{ postId: string; commentId?: string } | null>(null);
@@ -82,16 +77,6 @@ const Post = ({ post, onAddComment, onAddReply, onDeletePost, currentUserId }: P
     }));
   };
 
-  const handleLikePost = (postId: string) => {
-    if (likedPosts.includes(postId)) {
-      setLikedPosts(likedPosts.filter((id) => id !== postId));
-      post.interact.emoticons = post.interact.emoticons.filter(emoticon => emoticon._iduser !== currentUserId);
-    } else {
-      setLikedPosts([...likedPosts, postId]);
-      post.interact.emoticons.push({ typeEmoticons: 'like', _iduser: currentUserId });
-    }
-  };
-
   const handleReplyToComment = (commentId: string) => {
     setReplyInputs((prevReplyInputs) => ({
       ...prevReplyInputs,
@@ -109,17 +94,6 @@ const Post = ({ post, onAddComment, onAddReply, onDeletePost, currentUserId }: P
   const handleSubmitReply = (commentId: string) => {
     const replyText = replyTexts[commentId];
     if (replyText.trim()) {
-      const reply: CommentType = {
-        _iduser: currentUserId,
-        content: replyText,
-        img: [],
-        replyComment: [],
-        emoticons: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        _id: ''
-      };
-      onAddReply(post._id, commentId, reply);
       setReplyInputs((prevReplyInputs) => ({
         ...prevReplyInputs,
         [commentId]: false,
@@ -137,37 +111,8 @@ const Post = ({ post, onAddComment, onAddReply, onDeletePost, currentUserId }: P
 
   const handleSubmitNewComment = () => {
     if (newComment.trim()) {
-      const comment: CommentType = {
-        _iduser: currentUserId,
-        content: newComment,
-        img: [],
-        replyComment: [],
-        emoticons: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        _id: ''
-      };
-      onAddComment(post._id, comment);
       setNewComment('');
     }
-  };
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDeletePost = () => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) {
-      onDeletePost(post._id);
-    }
-  };
-
-  const handleSavePost = () => {
-    handleMenuClose();
   };
 
   const handleOpenReportDialog = (postId: string, commentId?: string) => {
@@ -205,83 +150,6 @@ const Post = ({ post, onAddComment, onAddReply, onDeletePost, currentUserId }: P
             </Typography>
           </Box>
         </Box>
-        <Box>
-          {/* Chỉ hiển thị nút xóa nếu người dùng là chủ sở hữu bài viết */}
-          <IconButton onClick={handleMenuOpen}>
-            <MoreHoriz sx={{ color: '#757575' }} />
-          </IconButton>
-        </Box>
-        <Menu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          PaperProps={{
-            sx: {
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)', // Bóng mờ mềm mại
-              borderRadius: 2, // Đường bo tròn đẹp
-              minWidth: 200, // Đảm bảo chiều rộng của menu
-              fontFamily: '"Roboto", sans-serif', // Font chữ tùy chỉnh cho toàn bộ menu
-            }
-          }}
-        >
-          {/* Mục lưu bài viết */}
-          <MenuItem
-            onClick={handleSavePost}
-            sx={{
-              fontSize: '14px', // Kích thước font chữ
-              fontWeight: 500, // Trọng lượng chữ (bold nhẹ)
-              '&:hover': {
-                backgroundColor: '#f0f0f0', // Đổi màu nền khi di chuột qua
-              },
-            }}
-          >
-            <Bookmark fontSize="small" sx={{ marginRight: 1, color: '#1E90FF' }} /> {/* Biểu tượng Bookmark */}
-            Lưu bài viết
-          </MenuItem>
-
-          {/* Mục báo cáo bài viết */}
-          <MenuItem
-            onClick={() => handleOpenReportDialog(post._id)}
-            sx={{
-              fontSize: '14px',
-              fontWeight: 500,
-              '&:hover': {
-                backgroundColor: '#f0f0f0',
-              },
-            }}
-          >
-            <Report fontSize="small" sx={{ marginRight: 1, color: '#f39c12' }} /> {/* Biểu tượng Report */}
-            Báo cáo bài viết
-          </MenuItem>
-
-          {/* Mục xóa bài viết chỉ hiển thị khi người dùng là chủ sở hữu */}
-          {post.idHandler === currentUserId && (
-            <MenuItem
-              onClick={handleDeletePost}
-              sx={{
-                fontSize: '14px',
-                fontWeight: 500,
-                '&:hover': {
-                  backgroundColor: '#fdecea', // Màu nền đỏ nhẹ khi di chuột qua
-                },
-                color: '#d32f2f', // Màu chữ đỏ cho xóa
-              }}
-            >
-              <Delete fontSize="small" sx={{ marginRight: 1, color: '#d32f2f' }} /> {/* Biểu tượng Delete */}
-              Xoá bài viết
-            </MenuItem>
-          )}
-        </Menu>
-
-
       </Box>
 
       <Typography variant="body1" sx={{ color: '#424242', marginBottom: 2 }}>
@@ -331,7 +199,6 @@ const Post = ({ post, onAddComment, onAddReply, onDeletePost, currentUserId }: P
             startIcon={<Favorite />}
             size="small"
             sx={{ color: likedPosts.includes(post._id) ? '#d32f2f' : '#424242', marginRight: 2, '&:hover': { backgroundColor: '#f5f5f5' } }}
-            onClick={() => handleLikePost(post._id)}
           >
             {likedPosts.includes(post._id) ? 'Bỏ thích' : 'Yêu thích'}
           </Button>
