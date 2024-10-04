@@ -14,7 +14,8 @@ const ListReport = ({reports}: ListReport) => {
 
     return (
         <Box>
-        <Typography>Danh sách report</Typography>
+        <Typography variant="h5">Danh sách report</Typography>
+        <Typography sx={{margin: '20px 0px'}} >Số lượng: {reports.length} </Typography>
         <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 3 }}>
         <Table>
           <TableHead>

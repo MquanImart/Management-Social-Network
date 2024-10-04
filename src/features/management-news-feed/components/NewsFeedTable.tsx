@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box } from '@mui/material';
 import { Article } from '../../../interface/interface';
 
 interface NewsFeedTableProps {
+  selectedLevel: string[];
+  selectedStatus: string[];
+  sortOrder: string;
   articles: Article[];
   onViewDetailArticle: (idArticle: string) => void;
   deleteArticle: (articleID: string) => void;
@@ -14,8 +17,8 @@ enum ReportStatus {
   Rejected = 'rejected'     // Bị từ chối
 }
 
-const NewsFeedTable: React.FC<NewsFeedTableProps> = ({ articles,onViewDetailArticle, deleteArticle, completeCheckArticle }) => {
-  
+const NewsFeedTable: React.FC<NewsFeedTableProps> = ({selectedLevel, selectedStatus, sortOrder, articles, onViewDetailArticle, deleteArticle, completeCheckArticle }) => {
+  const [listArticles, setListArtilces] = useState<Article[]>(articles);
   const getReportStatus = (reports: Article['reports']) => {
     if (reports.every(report => report.status === 'processed')) {
       return ReportStatus.Processed;
@@ -25,7 +28,33 @@ const NewsFeedTable: React.FC<NewsFeedTableProps> = ({ articles,onViewDetailArti
     }
     return ReportStatus.Pending;
   };
+  useEffect(()=> {
+    const newListArticle = articles.filter((article) => {
+      const reportsCount = article.reports.length;
+      if (selectedLevel.includes('Nghiêm trọng') && reportsCount > 10) {
+        return true;
+      } else if (selectedLevel.includes('Xem xét') && reportsCount > 5 && reportsCount <= 10) {
+        return true;
+      } else if (selectedLevel.includes('Bình thường') && reportsCount >= 0 && reportsCount <= 5) {
+        return true;
+      }
+      return false;
+    });
 
+    const newListArticle_ = newListArticle.filter((article) => {
+      const reportStatus_ = getReportStatus(article.reports);
+      if (reportStatus_ === ReportStatus.Rejected && selectedStatus.includes('rejected')) {
+        return true;
+      } else if (reportStatus_ === ReportStatus.Processed && selectedStatus.includes('processed')) {
+        return true;
+      } else if (reportStatus_ === ReportStatus.Pending && selectedStatus.includes('pending')) {
+        return true;
+      }
+      return false;
+    });
+    setListArtilces(newListArticle_);
+  }, [selectedLevel, selectedStatus]);
+  
   return (
     <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 3 }}>
       <Table>
@@ -41,7 +70,7 @@ const NewsFeedTable: React.FC<NewsFeedTableProps> = ({ articles,onViewDetailArti
           </TableRow>
         </TableHead>
         <TableBody>
-          {articles.map((article) => (
+          {listArticles.map((article) => (
             <TableRow key={article._id}>
               <TableCell>{article._id}</TableCell>
               <TableCell>{article.createdBy}</TableCell>

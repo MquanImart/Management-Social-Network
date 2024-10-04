@@ -6,11 +6,17 @@ import NewsFeedTable from '../../components/NewsFeedTable';
 import useNewsFeed from './useNewsFeed';
 import { useNavigate } from 'react-router-dom';
 import FilterNewsFeed from '../../components/FilterNewsFeed';
+import useFilterNewsFeed from './useFilterNewsFeed';
 
 const ManagementNewsFeed: React.FC = () => {
   const navigate = useNavigate();
-  const {listArticle,deteleArticle, completeCheckArticle } = useNewsFeed();
-
+  const {listArticle,deleteArticle, completeCheckArticle } = useNewsFeed();
+  const {
+    selectedLevel, selectedStatus, sortOrder,
+    handleChangeLevel,
+    handleChangeStatus,
+    handleSortChange
+  } = useFilterNewsFeed();
   const onViewDetailArticle = (idArticle: string) => {
     navigate(`/detail-news-feed/${idArticle}`);
   }
@@ -23,10 +29,15 @@ const ManagementNewsFeed: React.FC = () => {
       <Grid item xs={9} sx={{ backgroundColor: '#f8f9fb' }}>
         <Header />
         <Box sx={{mb: 2}}/>
-            <FilterNewsFeed/>
-            <NewsFeedTable articles={listArticle} 
+            <FilterNewsFeed selectedLevel={selectedLevel} selectedStatus={selectedStatus} sortOrder={sortOrder} 
+              handleChangeLevel={handleChangeLevel} 
+              handleChangeStatus={handleChangeStatus} 
+              handleSortChange={handleSortChange} 
+            />
+            <NewsFeedTable selectedLevel={selectedLevel} selectedStatus={selectedStatus} 
+              sortOrder={sortOrder} articles={listArticle} 
               onViewDetailArticle={onViewDetailArticle} 
-              deleteArticle={deteleArticle} 
+              deleteArticle={deleteArticle} 
               completeCheckArticle={completeCheckArticle}   
             />
       </Grid>
