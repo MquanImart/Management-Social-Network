@@ -91,7 +91,8 @@ const completeCheckArticle = () => {
           currentUserId={'user001'}
         />
         <Button variant="contained"
-          sx={{width: '100%', backgroundColor: '#e9e9e9', color: 'black', margin: '10px 0px'}}>
+          sx={{width: '100%', backgroundColor: '#e9e9e9', color: 'black', margin: '10px 0px'}}
+          onClick={() => navigate('/profile/u123')}>
           Xem trang cá nhân
         </Button>
         <ListReport reports={post.reports}/>

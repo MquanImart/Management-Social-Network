@@ -182,6 +182,6 @@ export interface Article {
     hobbies: string[];
     createdAt: Date;
     updatedAt: Date;
-    _destroy: Date;
+    _destroy: Date | null;
 }
   
