@@ -41,7 +41,7 @@ const Login: React.FC = () => {
       if (response.ok) {
         sessionStorage.setItem('token', data.token);
   
-        navigate('/management-user');
+        navigate('/dashboard');
       } else {
         setError(data.message || 'Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập.');
       }
