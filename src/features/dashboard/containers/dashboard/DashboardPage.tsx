@@ -36,7 +36,7 @@ const DashboardPage: React.FC = () => {
         };
 
         // Fetch tổng quan
-        const summaryResponse = await fetch('http://localhost:3000/v1/dashboards/summary', {
+        const summaryResponse = await fetch('http://localhost:3000/v1/admin/summary', {
           method: 'GET',
           headers,
         });
@@ -50,7 +50,7 @@ const DashboardPage: React.FC = () => {
         ]);
 
         // Fetch số người dùng mới trong tuần
-        const newUsersResponse = await fetch('http://localhost:3000/v1/dashboards/new-users-week', {
+        const newUsersResponse = await fetch('http://localhost:3000/v1/admin/new-users-week', {
           method: 'GET',
           headers,
         });
@@ -67,7 +67,7 @@ const DashboardPage: React.FC = () => {
         });
 
         // Fetch tăng trưởng người dùng theo tuần
-        const growthResponse = await fetch('http://localhost:3000/v1/dashboards/user-growth', {
+        const growthResponse = await fetch('http://localhost:3000/v1/admin/user-growth', {
           method: 'GET',
           headers,
         });
@@ -86,7 +86,7 @@ const DashboardPage: React.FC = () => {
         });
 
         // Fetch phân phối người dùng theo nhóm
-        const groupDistributionResponse = await fetch('http://localhost:3000/v1/dashboards/group-distribution', {
+        const groupDistributionResponse = await fetch('http://localhost:3000/v1/admin/group-distribution', {
           method: 'GET',
           headers,
         });

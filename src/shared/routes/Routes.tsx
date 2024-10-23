@@ -1,16 +1,17 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from '../../features/user-authentication/containers/login/Login';
-import UserManagementPage from '../../features/management-user/containers/management-user/UserManagementPage'
-import DashboardPage from '../../features/dashboard/containers/dashboard/DashboardPage'
+import UserManagementPage from '../../features/management-user/containers/management-user/UserManagementPage';
+import DashboardPage from '../../features/dashboard/containers/dashboard/DashboardPage';
 import ManagementNewsFeed from '../../features/management-news-feed/containers/management-news-feed/ManagementNewsFeed';
 import DetailNewsFeed from '../../features/management-news-feed/containers/detail-news-feed/DetailNewsFeed';
 import ProfilePost from '../../features/management-user/containers/profile/personal-page/ProfilePost';
 import Profile from '../../features/management-user/containers/profile/Profile';
 import ProfileCollection from '../../features/management-user/containers/profile/personal-collection/ProfileCollection';
 import ManagementGroups from '../../features/management-group/containers/group/ManagementGroups';
+import PrivateRoute from './PrivateRoute'; // Import PrivateRoute
+
 const Routes = () => {
 
-  
   const router = createBrowserRouter([
     {
       path: '/',
@@ -21,24 +22,44 @@ const Routes = () => {
       element: <Login />,
     },
     {
-        path: '/management-user',
-        element: <UserManagementPage />,
+      path: '/dashboard',
+      element: (
+        <PrivateRoute>
+          <DashboardPage />
+        </PrivateRoute>
+      ),
     },
     {
-        path: '/dashboard',
-        element: <DashboardPage />,
+      path: '/management-user',
+      element: (
+        <PrivateRoute>
+          <UserManagementPage />
+        </PrivateRoute>
+      ),
     },
     {
       path: '/management-news-feed',
-      element: <ManagementNewsFeed />,
+      element: (
+        <PrivateRoute>
+          <ManagementNewsFeed />
+        </PrivateRoute>
+      ),
     },
     {
       path: '/detail-news-feed/:id',
-      element: <DetailNewsFeed />,
+      element: (
+        <PrivateRoute>
+          <DetailNewsFeed />
+        </PrivateRoute>
+      ),
     },
     {
       path: '/profile/:userID',
-      element: <Profile />,
+      element: (
+        <PrivateRoute>
+          <Profile />
+        </PrivateRoute>
+      ),
       children: [
         {
           path: '',
@@ -46,13 +67,17 @@ const Routes = () => {
         },
         {
           path: 'personal-collection',
-          element: <ProfileCollection />, 
+          element: <ProfileCollection />,
         },
       ],
     },
     {
       path: '/groups',
-      element: <ManagementGroups />,
+      element: (
+        <PrivateRoute>
+          <ManagementGroups />
+        </PrivateRoute>
+      ),
     },
   ]);
 

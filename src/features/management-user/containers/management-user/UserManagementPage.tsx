@@ -18,7 +18,7 @@ const UserManagementPage: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:3000/v1/user/admin/management-users', {
+        const response = await fetch('http://localhost:3000/v1/admin/management-users', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

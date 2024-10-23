@@ -25,7 +25,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
     const action = user.status === 'active' ? 'lock' : 'unlock';
     
     try {
-      const response = await fetch(`http://localhost:3000/v1/user/${user._id}/${action}`, {
+      const response = await fetch(`http://localhost:3000/v1/admin/${user._id}/${action}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
