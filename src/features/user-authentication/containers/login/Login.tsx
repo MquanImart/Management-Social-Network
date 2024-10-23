@@ -24,12 +24,32 @@ const Login: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(''); // Xóa thông báo lỗi trước khi đăng nhập
+  
     try {
-      navigate('/management-user');
+      // Gửi yêu cầu đăng nhập tới API
+      const response = await fetch('http://localhost:3000/v1/auth/login-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        sessionStorage.setItem('token', data.token);
+  
+        navigate('/management-user');
+      } else {
+        setError(data.message || 'Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập.');
+      }
     } catch (err) {
-      setError('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập.');
+      setError('Đã xảy ra lỗi trong quá trình đăng nhập, vui lòng thử lại sau.');
     }
   };
+  
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Avatar, Paper, Button, Divider } from '@mui/material';
 import { User } from '../../../interface/interface';
 import LockIcon from '@mui/icons-material/Lock';
@@ -14,13 +14,41 @@ interface UserDetailsProps {
 
 const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
   const primaryColor = '#1976d2'; // Màu chủ đạo
+  const [loading, setLoading] = useState<boolean>(false); // Trạng thái loading
 
   if (!user) {
     return <Typography variant="h6" sx={{ textAlign: 'center', marginTop: 5, color: primaryColor }}>Select a user to view details</Typography>;
   }
 
+  const handleLockUnlock = async () => {
+    setLoading(true); // Bắt đầu loading
+    const action = user.status === 'active' ? 'lock' : 'unlock';
+    
+    try {
+      const response = await fetch(`http://localhost:3000/v1/user/${user._id}/${action}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`, // Token nếu có
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        onLockUnlock(user._id, data.status); // Cập nhật trạng thái của người dùng
+      } else {
+        console.error(data.message); // Xử lý lỗi nếu có
+      }
+    } catch (error) {
+      console.error('Failed to lock/unlock user:', error);
+    } finally {
+      setLoading(false); // Kết thúc loading
+    }
+  };
+
   return (
-    <Paper sx={{ padding: 4, boxShadow: 5, borderRadius: 5, bgcolor: '#f3f4f6' }}>
+    <Paper sx={{ padding: 2, boxShadow: 3, borderRadius: 3, height: '665px'}}>
       {/* Phần thông tin tiêu đề */}
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Avatar
@@ -36,7 +64,13 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
         />
         <Box>
           <Typography variant="h4" fontWeight="bold" color={primaryColor}>{user.displayName}</Typography>
-          <Typography variant="subtitle1" color="#616161">@{user.userName}</Typography>
+          <Typography
+            variant="subtitle1"
+            color="#616161"
+            sx={{ wordWrap: 'break-word', whiteSpace: 'normal', maxWidth: '90%' }} // Thêm thuộc tính này
+          >
+            @{user.userName}
+          </Typography>
         </Box>
       </Box>
 
@@ -50,15 +84,15 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <PhoneIcon sx={{ color: primaryColor, mr: 1 }} />
-          <Typography variant="body1"><strong>SĐT: </strong>{user.details.phoneNumber}</Typography>
+          <Typography variant="body1"><strong>SĐT: </strong>{user.details?.phoneNumber || 'N/A'}</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <HomeIcon sx={{ color: primaryColor, mr: 1 }} />
-          <Typography variant="body1"><strong>Địa chỉ: </strong>{user.details.address}</Typography>
+          <Typography variant="body1"><strong>Địa chỉ: </strong>{user.details?.address || 'N/A'}</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Typography variant="body1"><strong>Mức độ vi phạm: </strong>{user.account.warningLevel}</Typography>
-        </Box> 
+        </Box>
         <Typography variant="body1">
           <strong>Trạng thái: </strong>
           <span style={{ color: user.status === 'active' ? primaryColor : 'red', fontWeight: 'bold' }}>
@@ -73,7 +107,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" fontWeight="bold" color={primaryColor}>Giới thiệu</Typography>
         <Typography variant="body2" color="#424242" sx={{ fontStyle: 'italic' }}>
-          {user.aboutMe}
+          {user.aboutMe || 'Chưa có thông tin giới thiệu'}
         </Typography>
       </Box>
 
@@ -99,7 +133,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
               </Box>
             ))
           ) : (
-            <Typography variant="body2" color="#9e9e9e">Không có</Typography>
+            <Typography variant="body2" color="#9e9e9e">Không có sở thích</Typography>
           )}
         </Box>
       </Box>
@@ -117,9 +151,10 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
               boxShadow: 3,
               '&:hover': { bgcolor: '#d32f2f' },
             }}
-            onClick={() => onLockUnlock(user._id, 'locked')}
+            onClick={handleLockUnlock}
+            disabled={loading}
           >
-            Lock Account
+            {loading ? 'Đang khóa...' : 'Khóa tài khoản'}
           </Button>
         ) : (
           <Button
@@ -132,9 +167,10 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
               boxShadow: 3,
               '&:hover': { bgcolor: '#1976d2' },
             }}
-            onClick={() => onLockUnlock(user._id, 'active')}
+            onClick={handleLockUnlock}
+            disabled={loading}
           >
-            Unlock Account
+            {loading ? 'Đang mở...' : 'Mở khóa tài khoản'}
           </Button>
         )}
       </Box>

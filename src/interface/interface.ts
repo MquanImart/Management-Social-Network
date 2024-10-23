@@ -1,4 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // User Interface
+
+interface UserDataDisplay {
+  _id: string;
+  avt: string[];
+  name: string;
+}
 export interface User {
     _id: string;
     account: {
@@ -27,28 +34,35 @@ export interface User {
       name: string;
       items: string[];
       createdAt: Date;
-      updatedAt: Date;
-      _destroy: Date;
+      updatedAt: Date | null;
+      _destroy: Date | null;
     }>;
     groups: string[];
     backGround: string[];
     aboutMe: string,
-    createDate: string;
     hobbies: string[];
     listArticle: string[];
     createdAt: Date;
-    updatedAt: Date;
-    _destroy: Date;
-}
+    updatedAt: Date | null;
+    _destroy: Date | null;
   
+      // Thêm để không bị lỗi thôi (Bỏ qua phần này)
+    idUser: any;
+    state: any;
+    joinDate: string | number | Date;
+    follow: string[];
+    follower: UserDataDisplay[];
+  
+  
+  
+  
+    senderId: User; // Thay đổi từ string sang User
+}
   
   // Conversation Interface
 export interface Conversation {
     _id: string;
-    _user: {
-      user1: string;
-      user2: string;
-    };
+    _user: string[];
     content: Array<{
       userId: string;
       message: {
@@ -56,6 +70,7 @@ export interface Conversation {
         data: string;
       };
       sendDate: Date;
+      viewDate: Date | null;
     }>;
 }
   
@@ -64,20 +79,21 @@ export interface AddFriends {
     senderId: string;
     receiverId: string;
     status: 'accepted' | 'pending' | 'rejected';
+    message: string;
     createdAt: Date;
-    acceptedAt?: Date;
+    acceptedAt: Date | null;
 }
   
   // Notification Interface
 export interface Notification {
     _id: string;
-    senderId: string;
-    receiverId: string;
+    senderId: User;
+    receiverId: User;
     message: string;
     status: 'read' | 'unread';
-    readAt?: Date;
+    readAt?:  Date | null;
     createdAt: Date;
-    _destroy?: Date;
+    _destroy?: Date | null;
 }
   
   // Hobbies Interface
@@ -86,7 +102,7 @@ export interface Hobby {
     name: string;
     createdAt: Date;
     updatedAt: Date;
-    _destroy?: Date;
+    _destroy: Date | null;
 }
   
   // MyPhoto Interface
@@ -110,8 +126,9 @@ export interface Emoticon {
   
   export interface Comment {
     _id: string;
-    _iduser: string;
+    _iduser: string; // Chấp nhận cả User hoặc string (userId)
     content: string;
+    totalLikes: number;
     img: string[];
     replyComment: Array<Comment>; // Đệ quy: bình luận có thể có các bình luận con
     emoticons: Array<Emoticon>;
@@ -130,7 +147,7 @@ export interface Emoticon {
     // Article Interface
 export interface Article {
     _id: string;
-    createdBy: string, // Mã người tạo bài viết
+    createdBy: User, // Mã người tạo bài viết
     sharedPostId: string | null; // Mã bài viết gốc được chia sẻ (nếu có)
     idHandler: string | null;
     handleDate: Date | null;
@@ -149,6 +166,10 @@ export interface Article {
     createdAt: Date;
     updatedAt: Date;
     _destroy: Date | null;
+
+    //Dưới đây là những thứ không nằm trong database (thêm để tránh bị lỗi)
+    totalLikes: 0,
+    totalComments: number; // 
 }
   // Group Interface
   export interface Group {
@@ -164,6 +185,7 @@ export interface Article {
       count: number;
       listUsers: Array<{
         idUser: string;
+        state: 'accepted' | 'pending' | 'rejected';
         joinDate: string;
       }>;
     };
@@ -177,11 +199,24 @@ export interface Article {
     rule: string[];
     Administrators: Array<{
       idUser: string;
+      state: 'accepted' | 'pending' | 'rejected';
       joinDate: string;
     }>;
     hobbies: string[];
     createdAt: Date;
     updatedAt: Date;
-    _destroy: Date | null;
+    _destroy: Date;
+
+
+
+
+ // Thêm để không bị lỗi thôi (Bỏ qua phần  này)
+  userState?: string;
+  avtFile?: File;  // <-- Add these properties
+  backGroundFile?: File;  // <-- Add these properties
 }
-  
+
+export interface Admin {
+  email: string;
+  password: string;
+}

@@ -1,5 +1,5 @@
 import {useEffect, useState } from "react"
-import { User } from "../../../interface/interface";
+import { User } from "../../../../interface/interface.ts";
 
 export const useProfile = () => {
     const [myUser, setMyUser] = useState<User | null>(null);

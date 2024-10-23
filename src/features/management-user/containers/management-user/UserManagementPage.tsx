@@ -1,61 +1,46 @@
-import React, { useState } from 'react';
-import { Box, Grid } from '@mui/material';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, Pagination } from '@mui/material';
 import Sidebar from '../../../../shared/components/sidebar/Sidebar';
 import Header from '../../../../shared/components/header/Header';
 import UserTable from '../../components/UserTable';
 import UserDetails from '../../components/UserDetails';
 import { User } from '../../../../interface/interface';
 
-const mockUserData: User[] = [
-  {
-    _id: '1',
-    account: { warningLevel: 0, email: 'john.doe@example.com', password: '' },
-    firstName: 'John',
-    lastName: 'Doe',
-    displayName: 'John Doe',
-    userName: 'johndoe',
-    details: { phoneNumber: '123456789', address: '123 Main St', gender: true, birthDate: new Date() },
-    friends: [],
-    status: 'active',
-    avt: ['https://via.placeholder.com/150'],
-    collections: [],
-    groups: [],
-    backGround: [],
-    aboutMe: 'A passionate software engineer',
-    createDate: '2021-01-01',
-    hobbies: ['Reading', 'Gaming'],
-    listArticle: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    _destroy: new Date(),
-  },
-  {
-    _id: '2',
-    account: { warningLevel: 3, email: 'jane.smith@example.com', password: '' },
-    firstName: 'Jane',
-    lastName: 'Smith',
-    displayName: 'Jane Smith',
-    userName: 'janesmith',
-    details: { phoneNumber: '987654321', address: '456 Main St', gender: false, birthDate: new Date() },
-    friends: [],
-    status: 'locked',
-    avt: ['https://via.placeholder.com/150'],
-    collections: [],
-    groups: [],
-    backGround: [],
-    aboutMe: 'Love to travel and explore new places',
-    createDate: '2021-02-15',
-    hobbies: ['Traveling', 'Photography'],
-    listArticle: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    _destroy: new Date(),
-  },
-];
-
 const UserManagementPage: React.FC = () => {
-  const [users, setUsers] = useState<User[]>(mockUserData);
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const usersPerPage = 7 ; // Số lượng người dùng trên mỗi trang
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/v1/user/admin/management-users', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+
+        const data = await response.json();
+        setUsers(data.data); // Gán danh sách người dùng từ API
+        setLoading(false);
+      } catch (error) {
+        setError('Lỗi khi tải danh sách người dùng');
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleViewUser = (user: User) => {
     setSelectedUser(user);
@@ -72,6 +57,14 @@ const UserManagementPage: React.FC = () => {
     }
   };
 
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
   return (
     <Grid container sx={{ height: '100vh' }}>
       <Grid item xs={3} sx={{ backgroundColor: '#f4f5fa' }}>
@@ -81,14 +74,29 @@ const UserManagementPage: React.FC = () => {
       <Grid item xs={9} sx={{ backgroundColor: '#f8f9fb' }}>
         <Header />
         <Box sx={{mb: 2}}/>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <UserTable users={users} onViewUser={handleViewUser} />
+
+        {loading ? (
+          <p>Đang tải...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <Grid container spacing={2}>
+            <Grid item xs={8}>
+              <UserTable users={currentUsers} onViewUser={handleViewUser} />
+            </Grid>
+            <Grid item xs={4}>
+              <UserDetails user={selectedUser} onLockUnlock={handleLockUnlock} />
+            </Grid>
+            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Pagination
+                count={Math.ceil(users.length / usersPerPage)}
+                page={currentPage}
+                onChange={handleChangePage}
+                color="primary"
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={4}>
-            <UserDetails user={selectedUser} onLockUnlock={handleLockUnlock} />
-          </Grid>
-        </Grid>
+        )}
       </Grid>
     </Grid>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Paper, Typography } from '@mui/material';
 import { Line } from 'react-chartjs-2';
