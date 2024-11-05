@@ -53,7 +53,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Avatar
           alt={user.displayName}
-          src={user.avt[0]}
+          src={user.avt && user.avt.length > 0 ? (user.avt[user.avt.length - 1].link) as unknown as string : '/path/to/default-avatar.jpg'}
           sx={{
             width: 90,
             height: 90,
