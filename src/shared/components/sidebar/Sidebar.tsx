@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
     { text: 'Quản lí người dùng', icon: <PeopleIcon />, path: '/management-user' },
     { text: 'Quản lí bài viết', icon: <ArticleIcon />, path: '/management-news-feed' },
     { text: 'Quản lí nhóm', icon: <GroupsIcon />, path: '/groups' },
-    { text: 'Cài đặt', icon: <SettingsIcon />, path: '/settings' },
+
   ];
 
   // Hàm xử lý logout

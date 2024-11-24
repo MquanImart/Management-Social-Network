@@ -1,78 +1,94 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,  Typography, Button, Box } from '@mui/material';
+import {
+    Table, TableBody, TableCell, TableContainer, TableHead,
+    TableRow, Paper, Typography, Button, Box
+} from '@mui/material';
 import { Group } from '../../../interface/interface';
 
 interface GroupsTableProps {
-  selectedTopic: string[];
-  sortOrder: string;
-  activeLock: (groupsID: string) => void;
-  openActivity: (groupsID: string) => void;
-  groups: Group[];
+    selectedTopic: string[];
+    sortOrder: string;
+    activeLock: (groupID: string) => void;
+    openActivity: (groupID: string) => void;
+    groups: Group[];
+    loading: boolean;
 }
 
-const GroupsTable: React.FC<GroupsTableProps> = ({selectedTopic, sortOrder, activeLock, openActivity, groups }) => {
-  const [listGroups, setListGroups] = useState<Group[]>(groups);
-  
-  useEffect(() => {
-    const filteredGroups = groups.filter(group =>
-      group.hobbies.some(hobby => selectedTopic.includes(hobby))
+const GroupsTable: React.FC<GroupsTableProps> = ({ selectedTopic, sortOrder, activeLock, openActivity, groups, loading }) => {
+    const [listGroups, setListGroups] = useState<Group[]>(groups);
+
+    useEffect(() => {
+        const filteredGroups = groups.filter(group =>
+            group.hobbies.some(hobby => selectedTopic.includes(hobby))
+        );
+        setListGroups(filteredGroups);
+    }, [selectedTopic, sortOrder, groups]);
+
+    if (loading) {
+        return <Typography>Đang tải dữ liệu...</Typography>;
+    }
+
+    if (listGroups.length === 0) {
+        return <Typography>Không tìm thấy nhóm nào.</Typography>;
+    }
+
+    return (
+        <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 3 }}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell sx={{ fontWeight: 'bold' }}>ID Nhóm</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>Mức Cảnh Báo</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>Tên</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>ID Quản Trị</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>Số Thành Viên</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>Số Bài Viết</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>Hành Động</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                  {listGroups.map((group) => (
+                      <TableRow key={group._id}>
+                          <TableCell>{group._id}</TableCell>
+                          <TableCell>{group.warningLevel}</TableCell>
+                          <TableCell>{group.groupName}</TableCell>
+                          <TableCell>{group.idAdmin}</TableCell>
+                          <TableCell>{group.members.count}</TableCell>
+                          <TableCell>{group.article.count}</TableCell>
+                          <TableCell>
+                              <Box sx={{ display: 'flex', gap: 1 }}>
+                                  {group._destroy ? (
+                                      <Button
+                                          variant="outlined"
+                                          size="small"
+                                          sx={{ borderColor: 'green', color: 'green' }}
+                                          onClick={() => {
+                                              openActivity(group._id);
+                                          }}
+                                      >
+                                          Mở Khóa
+                                      </Button>
+                                  ) : (
+                                      <Button
+                                          variant="outlined"
+                                          size="small"
+                                          sx={{ borderColor: 'red', color: 'red' }}
+                                          onClick={() => {
+                                              activeLock(group._id);
+                                          }}
+                                      >
+                                          Khóa
+                                      </Button>
+                                  )}
+                              </Box>
+                          </TableCell>
+                      </TableRow>
+                  ))}
+              </TableBody>
+
+            </Table>
+        </TableContainer>
     );
-    setListGroups(filteredGroups);  
-  }, [selectedTopic, sortOrder])
-  return (
-    <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 3 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: 'bold' }}>ID</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Warning Level</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Group Name</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>type</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>ID Admin</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Members Count</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Main Topic</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {listGroups.map((group) => (
-            <TableRow key={group._id}>
-              <TableCell>{group._id}</TableCell>
-              <TableCell>{group.warningLevel}</TableCell>
-              <TableCell>{group.groupName}</TableCell>
-              <TableCell>{group.type}</TableCell>
-              <TableCell>{group.idAdmin}</TableCell>
-              <TableCell>{group.members.count}</TableCell>
-              <TableCell sx={{display: 'flex', flexDirection: 'column'}}>
-                {group.hobbies.map((hobbie) => 
-                  <Typography sx={{backgroundColor: '#ccc', borderRadius: 20, margin: '10px', textAlign: 'center'}}>
-                    {hobbie}
-                  </Typography>
-                )}
-              </TableCell>
-              <TableCell>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  {
-                    group._destroy === null? (
-                      <Button variant="outlined" size="small"
-                    sx={{borderColor: 'red', color: 'red'}} onClick={() => {activeLock(group._id)}}>
-                    Khóa
-                  </Button>
-                    ): (
-                      <Button variant="outlined" color="secondary" size="small"
-                    sx={{borderColor: 'green', color: 'green'}} onClick={() => {openActivity(group._id)}}>
-                    Mở khóa
-                  </Button>
-                    )
-                  }
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
 };
 
 export default GroupsTable;

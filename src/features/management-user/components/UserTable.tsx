@@ -9,22 +9,22 @@ interface UserTableProps {
 
 const UserTable: React.FC<UserTableProps> = ({ users, onViewUser }) => {
 
-  // Hàm để format trạng thái người dùng
+  // Hàm định dạng trạng thái người dùng
   const formatStatus = (status: string) => {
     if (status === 'active') {
-      return <Typography color="green">Active</Typography>;
+      return <Typography color="green">Hoạt động</Typography>;
     }
-    return <Typography color="red">Locked</Typography>;
+    return <Typography color="red">Bị khóa</Typography>;
   };
 
-  // Hàm format số điện thoại
+  // Hàm định dạng số điện thoại
   const formatPhoneNumber = (phoneNumber?: string) => {
-    if (!phoneNumber) return 'N/A'; // Nếu không có số điện thoại
+    if (!phoneNumber) return 'Không có'; // Nếu không có số điện thoại
     return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   };
 
-  // Tạo các hàng trống nếu số lượng user ít hơn 10
-  const emptyRows = Math.max(0, 10 - users.length); // Hiển thị tối đa 10 user mỗi lần
+  // Tạo các hàng trống nếu số lượng người dùng ít hơn 10
+  const emptyRows = Math.max(0, 10 - users.length); // Hiển thị tối đa 10 người dùng mỗi lần
 
   return (
     <TableContainer
@@ -32,26 +32,26 @@ const UserTable: React.FC<UserTableProps> = ({ users, onViewUser }) => {
       sx={{
         boxShadow: 3,
         borderRadius: 3,
-        width: '100%', 
+        width: '100%',
         margin: 'auto',
-        height: '695px',  // Cố định chiều cao của bảng
+        height: '695px', // Cố định chiều cao của bảng
       }}
     >
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold', width: '30%' }}>Email</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', width: '30%' }}>SĐT</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Mức độ</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', width: '30%' }}>Số điện thoại</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Mức độ cảnh báo</TableCell>
             <TableCell sx={{ fontWeight: 'bold', width: '20%' }}>Trạng thái</TableCell>
             <TableCell sx={{ fontWeight: 'bold', width: '5%' }}>Tác vụ</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {users.map((user, index) => (
-            <TableRow 
-              key={user._id} 
-              sx={{ height: '50px', ...(index === users.length - 1 && { borderBottom: 'none' }) }}  // Xóa border hàng cuối cùng
+            <TableRow
+              key={user._id}
+              sx={{ height: '50px', ...(index === users.length - 1 && { borderBottom: 'none' }) }} // Xóa đường viền hàng cuối cùng
             >
               <TableCell>{user.account.email}</TableCell>
               <TableCell>{formatPhoneNumber(user.details?.phoneNumber)}</TableCell>
@@ -77,7 +77,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onViewUser }) => {
             </TableRow>
           ))}
 
-          {/* Hiển thị các hàng trống để giữ chiều cao bảng nếu số lượng user ít */}
+          {/* Hiển thị các hàng trống để giữ chiều cao bảng nếu số lượng người dùng ít */}
           {emptyRows > 0 && (
             <TableRow style={{ height: 50 * emptyRows }}>
               <TableCell colSpan={6} />
