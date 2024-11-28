@@ -9,7 +9,7 @@ import FilterGroups from '../../components/FilterGroups';
 
 const ManagementGroups: React.FC = () => {
     const { listGroups, activeLock, openActivity, loading } = useGroups();
-    const { selectedTopic, sortOrder, handleChangeTopic, handleSortChange } = useFilterGroups();
+    const { selectedWarningLevel, sortOrder, handleWarningLevelChange, handleSortChange } = useFilterGroups();
 
     return (
         <Grid container sx={{ height: '100vh' }}>
@@ -19,10 +19,20 @@ const ManagementGroups: React.FC = () => {
             <Grid item xs={9} sx={{ backgroundColor: '#f8f9fb' }}>
                 <Header />
                 <Box sx={{ mb: 2 }} />
-                <FilterGroups selectedTopic={selectedTopic} sortOrder={sortOrder}
-                    handleChangeTopic={handleChangeTopic} handleSortChange={handleSortChange} />
-                <GroupsTable groups={listGroups} selectedTopic={selectedTopic} sortOrder={sortOrder}
-                    activeLock={activeLock} openActivity={openActivity} loading={loading} />
+                <FilterGroups 
+                    selectedWarningLevel={selectedWarningLevel} 
+                    sortOrder={sortOrder}
+                    handleWarningLevelChange={handleWarningLevelChange} 
+                    handleSortChange={handleSortChange} 
+                />
+                <GroupsTable 
+                    groups={listGroups} 
+                    selectedWarningLevel={selectedWarningLevel.map(String)} 
+                    sortOrder={sortOrder}
+                    activeLock={activeLock} 
+                    openActivity={openActivity} 
+                    loading={loading} 
+                />
             </Grid>
         </Grid>
     );

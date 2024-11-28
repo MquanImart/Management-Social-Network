@@ -12,7 +12,10 @@ const UserTable: React.FC<UserTableProps> = ({ users, onViewUser }) => {
   // Hàm định dạng trạng thái người dùng
   const formatStatus = (status: string) => {
     if (status === 'active') {
-      return <Typography color="green">Hoạt động</Typography>;
+      return <Typography color="red">Offline</Typography>;
+    }
+    if(status == 'online'){
+      return <Typography color="green">Online</Typography>;
     }
     return <Typography color="red">Bị khóa</Typography>;
   };

@@ -40,7 +40,7 @@ export interface User {
     groups: string[];
     backGround: string[];
     aboutMe: string,
-    hobbies: string[];
+    hobbies: Hobby[];
     listArticle: string[];
     createdAt: Date;
     updatedAt: Date | null;

@@ -22,7 +22,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
 
   const handleLockUnlock = async () => {
     setLoading(true); // Bắt đầu loading
-    const action = user.status === 'active' ? 'lock' : 'unlock';
+    const action = user.status === 'active' || user.status === 'online' ? 'lock' : 'unlock';
     
     try {
       const response = await fetch(`http://localhost:3000/v1/admin/${user._id}/${action}`, {
@@ -95,8 +95,13 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
         </Box>
         <Typography variant="body1">
           <strong>Trạng thái: </strong>
-          <span style={{ color: user.status === 'active' ? primaryColor : 'red', fontWeight: 'bold' }}>
-            {user.status === 'active' ? 'Active' : 'Locked'}
+          <span 
+            style={{
+              color: user.status === 'online' ? '#4caf50' : (user.status === 'active' ? primaryColor : 'red'),
+              fontWeight: 'bold'
+            }}
+          >
+            {user.status === 'online' ? 'Online' : (user.status === 'active' ? 'Active' : 'Locked')}
           </span>
         </Typography>
       </Box>
@@ -114,33 +119,35 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onLockUnlock }) => {
       {/* Hobbies Section */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" fontWeight="bold" color={primaryColor}>Sở thích</Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-          {user.hobbies.length > 0 ? (
-            user.hobbies.map((hobby, index) => (
-              <Box
-                key={index}
-                sx={{
-                  bgcolor: primaryColor,
-                  px: 2,
-                  py: 0.5,
-                  borderRadius: 2,
-                  fontSize: 14,
-                  color: 'white',
-                  fontWeight: 'bold',
-                }}
-              >
-                {hobby}
-              </Box>
-            ))
-          ) : (
-            <Typography variant="body2" color="#9e9e9e">Không có sở thích</Typography>
-          )}
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {user.hobbies.length > 0 ? (
+              user.hobbies.map((hobby, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    bgcolor: primaryColor,
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: 2,
+                    fontSize: 14,
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {hobby.name }
+                </Box>
+              ))
+            ) : (
+              <Typography variant="body2" color="#9e9e9e">Không có sở thích</Typography>
+            )}
+          </Box>
         </Box>
       </Box>
 
       {/* Nút Khóa/Mở khóa tài khoản */}
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-        {user.status === 'active' ? (
+        {(user.status === 'active' || user.status === 'online') ? (
           <Button
             variant="contained"
             color="error"

@@ -11,71 +11,64 @@ import {
 } from '@mui/material';
 
 interface FilterGroupsTableProps {
-  selectedTopic: string[];
+  selectedWarningLevel: number[];  // Kiểu mảng số
   sortOrder: string;
-  handleChangeTopic: (event: SelectChangeEvent<string[]>) => void;
   handleSortChange: (event: SelectChangeEvent<string>) => void;
+  handleWarningLevelChange: (event: SelectChangeEvent<number[]>) => void;  // Sửa để nhận mảng số
 }
 
-const FilterGroups = ({selectedTopic, sortOrder, handleChangeTopic, handleSortChange} : FilterGroupsTableProps) => {
-    const Topics = [
-        'Programming',
-        'Gaming',
-        'Running',
-        'Weightlifting',
-        'Cooking',
-        'Traveling'
-      ];
-      const sortOptions = [
-        { value: 'asc', label: 'Ascending' },
-        { value: 'desc', label: 'Descending' },
-      ];
+const FilterGroups = ({ selectedWarningLevel, sortOrder, handleSortChange, handleWarningLevelChange }: FilterGroupsTableProps) => {
+  const warningLevels = [1, 2, 3, 4];  // Mức độ cảnh báo dưới dạng số
+
+  const sortOptions = [
+      { value: 'asc', label: 'Ascending' },
+      { value: 'desc', label: 'Descending' },
+  ];
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
-    <Box sx={{ display: 'flex', alignItems: 'center'}}>
-    {/* Combobox checkbox */}
-      <Typography>Topic: </Typography>
-      <FormControl sx={{minWidth: '10vw', margin: '20px' }}>
-        <Select
-          multiple
-          value={selectedTopic}
-          onChange={handleChangeTopic}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap'}}>
-              {selected.length === Topics.length ? (
-                <Chip label="Tất cả" />
-              ) : (
-                selected.map((value) => (
-                  <Chip key={value} label={value}/>
-                ))
-              )}
-            </Box>
-          )}
-        >
-          {Topics.map((option) => (
-            <MenuItem key={option} value={option}>
-              <Checkbox checked={selectedTopic.indexOf(option) > -1} />
-              <ListItemText primary={option} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-    <Box sx={{ display: 'flex', alignItems: 'center'}}>
-      <Typography>Sắp xếp theo: </Typography>
-        {/* Combobox sắp xếp */}
-      <FormControl  sx={{width: '10vw', margin: '20px' }}>
-        <Select value={sortOrder} onChange={handleSortChange}>
-          {sortOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-    </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography>Mức Cảnh Báo: </Typography>
+              <FormControl sx={{ minWidth: '10vw', margin: '20px' }}>
+                  <Select
+                      multiple
+                      value={selectedWarningLevel}
+                      onChange={handleWarningLevelChange}
+                      renderValue={(selected) => (
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                              {selected.length === warningLevels.length ? (
+                                  <Chip label="Tất cả" />
+                              ) : (
+                                  selected.map((value) => (
+                                      <Chip key={value} label={`Cảnh báo mức ${value}`} />
+                                  ))
+                              )}
+                          </Box>
+                      )}
+                  >
+                      {warningLevels.map((level) => (
+                          <MenuItem key={level} value={level}>
+                              <Checkbox checked={selectedWarningLevel.indexOf(level) > -1} />
+                              <ListItemText primary={`Mức ${level}`} />
+                          </MenuItem>
+                      ))}
+                  </Select>
+              </FormControl>
+          </Box>
+
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography>Sắp xếp theo: </Typography>
+              <FormControl sx={{ width: '10vw', margin: '20px' }}>
+                  <Select value={sortOrder} onChange={handleSortChange}>
+                      {sortOptions.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                          </MenuItem>
+                      ))}
+                  </Select>
+              </FormControl>
+          </Box>
+      </Box>
   );
 };
 
