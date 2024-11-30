@@ -20,6 +20,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -49,7 +50,9 @@ const Login: React.FC = () => {
       setError('Đã xảy ra lỗi trong quá trình đăng nhập, vui lòng thử lại sau.');
     }
   };
-  
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -121,7 +124,7 @@ const Login: React.FC = () => {
                   fullWidth
                   name="password"
                   label="Mật khẩu"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="current-password"
                   sx={{ mb: 2 }}
@@ -131,7 +134,8 @@ const Login: React.FC = () => {
                 {error && <Typography color="error">{error}</Typography>}
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
-                  label="Hiện mật khẩu"
+                  label="Hiển thị mật khẩu"
+                  onChange={handleShowPassword}
                   sx={{ mb: 2 }}
                 />
                 <Button
