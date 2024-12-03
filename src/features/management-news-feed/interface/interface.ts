@@ -20,4 +20,5 @@ export interface Article {
     totalComments: number;
     reports: Report[];
     listPhoto?: { link: string; _id: string }[]; // Optional for photos
+    _destroy?: boolean;
 }
