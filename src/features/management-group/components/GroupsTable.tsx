@@ -16,13 +16,25 @@ interface GroupsTableProps {
 
 const GroupsTable: React.FC<GroupsTableProps> = ({ selectedWarningLevel, sortOrder, activeLock, openActivity, groups, loading }) => {
     const [listGroups, setListGroups] = useState<Group[]>(groups);
+    const [sortedGroups, setSortedGroups] = useState<Group[]>([]);
 
     useEffect(() => {
         // Lọc theo mức độ cảnh báo
         const filteredGroups = groups.filter(group => 
             selectedWarningLevel.length === 0 || selectedWarningLevel.includes(String(group.warningLevel))
         );
+
+        // Sắp xếp theo mức độ cảnh báo
+        const sorted = [...filteredGroups].sort((a, b) => {
+            if (sortOrder === 'asc') {
+                return a.warningLevel - b.warningLevel;
+            } else {
+                return b.warningLevel - a.warningLevel;
+            }
+        });
+        
         setListGroups(filteredGroups);
+        setSortedGroups(sorted);
     }, [selectedWarningLevel, sortOrder, groups]);
 
     if (loading) {
@@ -48,7 +60,7 @@ const GroupsTable: React.FC<GroupsTableProps> = ({ selectedWarningLevel, sortOrd
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {listGroups.map((group) => (
+                    {sortedGroups.map((group) => (
                         <TableRow key={group._id}>
                             <TableCell>{group._id}</TableCell>
                             <TableCell>{group.warningLevel}</TableCell>
