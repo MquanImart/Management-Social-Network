@@ -18,7 +18,7 @@ interface FilterGroupsTableProps {
 }
 
 const FilterGroups = ({ selectedWarningLevel, sortOrder, handleSortChange, handleWarningLevelChange }: FilterGroupsTableProps) => {
-  const warningLevels = [1, 2, 3, 4];  // Mức độ cảnh báo dưới dạng số
+  const warningLevels = [0, 1, 2, 3];  // Mức độ cảnh báo dưới dạng số
 
   const sortOptions = [
       { value: 'asc', label: 'Ascending' },
